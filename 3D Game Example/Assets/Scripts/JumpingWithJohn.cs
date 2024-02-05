@@ -22,6 +22,14 @@ public class JumpingWithJohn : MonoBehaviour
         Physics.gravity *= GravityModifier;
     }
 
+    void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Space) && IsOnGround)
+        {
+            _rigidbody.AddForce(Vector3.up * JumpForce, ForceMode.Impulse);
+            IsOnGround = false;
+        }
+    }
     // Update is called once per frame
     void FixedUpdate()
     {
