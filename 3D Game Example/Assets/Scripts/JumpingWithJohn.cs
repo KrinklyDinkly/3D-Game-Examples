@@ -8,18 +8,25 @@ public class JumpingWithJohn : MonoBehaviour
     public float moveSpeed = 1f;
     public float JumpForce = 10f;
     public float GravityModifier = 1f;
+    public float outOfBounds = -10f;
+    public GameObject checkpointAreaOject;
     public bool IsOnGround = true;
+    public bool isAtCheckpoint = false;
     private Vector3 _movement;
     //private Animator _animator;
     private Rigidbody _rigidbody;
     private Quaternion _rotation = Quaternion.identity;
+    private Vector3 _defaultGravity = new Vector3(0f, -9.81f, 0f);
+    private Vector3 _startingPosition;
 
     // Start is called before the first frame update
     void Start()
     {
         //m_Animator = GetComponent<Animator>();
         _rigidbody = GetComponent<Rigidbody>();
+        Physics.gravity = _defaultGravity;
         Physics.gravity *= GravityModifier;
+        _startingPosition = transform.position;
     }
 
     void Update()
@@ -28,6 +35,11 @@ public class JumpingWithJohn : MonoBehaviour
         {
             _rigidbody.AddForce(Vector3.up * JumpForce, ForceMode.Impulse);
             IsOnGround = false;
+        }
+
+        if(transform.position.y < outOfBounds)
+        {
+            transform.position = _startingPosition;
         }
     }
     // Update is called once per frame
@@ -69,4 +81,12 @@ public class JumpingWithJohn : MonoBehaviour
        // _rigidbody.MoveRotation (_rotation);
     //}
 }
+    void OnTriggerEnter(Collider other)
+        {
+            if(other.gameObject == checkpointAreaOject)
+            {
+                isAtCheckpoint = true;
+                _startingPosition = checkpointAreaOject.transform.position;
+            }    
+        }
 }
