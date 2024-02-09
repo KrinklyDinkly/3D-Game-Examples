@@ -5,6 +5,11 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ground
+  - Collectible Destroy
+  - Spinner
+  - Collectible Return
+  - Collectible-Destroy
+  - Collectible-Return
   layers:
   - Default
   - TransparentFX

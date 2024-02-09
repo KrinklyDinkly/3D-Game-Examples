@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class JumpingWithJohn : MonoBehaviour
 {
+    public int score = 0;
     public float turnSpeed = 20;
     public float moveSpeed = 1f;
     public float JumpForce = 10f;
     public float GravityModifier = 1f;
     public float outOfBounds = -10f;
-    public GameObject checkpointAreaOject;
+    public GameObject checkpointAreaObject;
+    public GameObject finishAreaObject;
     public bool IsOnGround = true;
     public bool isAtCheckpoint = false;
     private Vector3 _movement;
@@ -18,6 +20,10 @@ public class JumpingWithJohn : MonoBehaviour
     private Quaternion _rotation = Quaternion.identity;
     private Vector3 _defaultGravity = new Vector3(0f, -9.81f, 0f);
     private Vector3 _startingPosition;
+    private Vector3 _checkpointPosition;
+
+     private GameObject[] _collectibles;
+
 
     // Start is called before the first frame update
     void Start()
@@ -27,6 +33,7 @@ public class JumpingWithJohn : MonoBehaviour
         Physics.gravity = _defaultGravity;
         Physics.gravity *= GravityModifier;
         _startingPosition = transform.position;
+        _collectibles = GameObject.FindGameObjectsWithTag("Collectible-Return");
     }
 
     void Update()
@@ -39,7 +46,17 @@ public class JumpingWithJohn : MonoBehaviour
 
         if(transform.position.y < outOfBounds)
         {
-            transform.position = _startingPosition;
+            if(isAtCheckpoint)
+            {
+                ReturningCollectibles();
+                transform.position = _checkpointPosition;
+            }
+            else
+            {
+                ReturningCollectibles();
+                transform.position = _startingPosition;
+            }
+            
         }
     }
     // Update is called once per frame
@@ -75,6 +92,22 @@ public class JumpingWithJohn : MonoBehaviour
             IsOnGround = true;
         }
 
+
+        if (collision.gameObject.CompareTag("Spinner"))
+        {
+            if(isAtCheckpoint)
+            {
+                ReturningCollectibles();
+                transform.position = checkpointAreaObject.transform.position;
+                
+            }
+            else
+            {
+                ReturningCollectibles();
+                transform.position = _startingPosition;
+            }
+        }
+
     //void OnAnimatorMove ()
     //{
       //  _rigidbody.MovePosition (_rigidbody.position + _movement * m_Animator.deltaPosition.magnitude);
@@ -83,10 +116,39 @@ public class JumpingWithJohn : MonoBehaviour
 }
     void OnTriggerEnter(Collider other)
         {
-            if(other.gameObject == checkpointAreaOject)
+            if(other.gameObject == checkpointAreaObject)
             {
                 isAtCheckpoint = true;
-                _startingPosition = checkpointAreaOject.transform.position;
+                _checkpointPosition = checkpointAreaObject.transform.position;
             }    
+
+            if(other.gameObject == finishAreaObject)
+            {
+                isAtCheckpoint = false;
+                ReturningCollectibles();
+                transform.position = _startingPosition;
+            }
+
+            if(other.gameObject.CompareTag("Collectible-Destroy"))
+        {
+            score++;
+            Destroy(other.gameObject);
         }
+
+        if(other.gameObject.CompareTag("Collectible-Return"))
+        {
+            score++;
+            other.gameObject.GetComponent<Collectible>().HideCollectibles();
+        }
+        }
+
+        void ReturningCollectibles()
+    {
+        for(int i = 0; i < _collectibles.Length; i++)
+        {
+            _collectibles[i].SetActive(true);
+            _collectibles[i].GetComponent<Collectible>().ReturnCollectibles();
+        }
+    }
+
 }
