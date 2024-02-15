@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class BallMovement : MonoBehaviour
 {
     private Rigidbody playerRb;
     //private GameObject FocalPoint;
