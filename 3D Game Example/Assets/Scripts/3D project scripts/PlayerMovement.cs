@@ -150,5 +150,9 @@ public class PlayerMovement : MonoBehaviour
             _collectibles[i].GetComponent<Collectible>().ReturnCollectibles();
         }
     }
+    public bool IsPlayerOnGround()
+    {
+        return IsOnGround;
+    }
 
 }
