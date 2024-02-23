@@ -23,7 +23,7 @@ public class PlayerAnimation : MonoBehaviour
     private void PlayerWalking()
     {
         float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("verticle");
+        float vertical = Input.GetAxis("Vertical");
 
         if(Mathf.Abs(horizontal) > 0 || Mathf.Abs(vertical) > 0)
         {
@@ -31,7 +31,7 @@ public class PlayerAnimation : MonoBehaviour
         }
         else
         {
-            _characterAnimtor.SetBool("IsWalking", true);
+            _characterAnimtor.SetBool("IsWalking", false);
         }
     }
 
